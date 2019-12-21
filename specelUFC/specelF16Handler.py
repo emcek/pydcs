@@ -1,6 +1,6 @@
 from PIL import Image, ImageFont, ImageDraw
 
-from specelUFC.dcsbiosParser import StringBuffer
+from dcsbiosParser import StringBuffer
 
 
 class F16Handler:

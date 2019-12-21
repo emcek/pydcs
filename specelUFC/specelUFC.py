@@ -4,8 +4,8 @@ import time
 
 from packaging import version
 
-from specelUFC.dcsbiosParser import ProtocolParser
-from specelUFC.specelG13Handler import G13Handler
+from dcsbiosParser import ProtocolParser
+from specelG13Handler import G13Handler
 
 __version__ = "v1.12"
 

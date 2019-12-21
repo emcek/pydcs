@@ -4,10 +4,10 @@ from sys import maxsize
 
 from PIL import Image, ImageFont, ImageDraw
 
-from specelUFC import GLCD_SDK
-from specelUFC.dcsbiosParser import StringBuffer
-from specelUFC.specelF16Handler import F16Handler
-from specelUFC.specelFA18Handler import FA18Handler
+import GLCD_SDK
+from dcsbiosParser import StringBuffer
+from specelF16Handler import F16Handler
+from specelFA18Handler import FA18Handler
 
 
 class G13Handler:
