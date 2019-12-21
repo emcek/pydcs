@@ -58,9 +58,10 @@ class FA18Handler:
         self.draw.rectangle((0, 0, self.width, self.height), 0, 0)
 
         # Scrachpad
-        self.draw.text((0, 0), (
-                    self.ScratchpadString1Display + "" + self.ScratchpadString2Display + "" + self.ScratchpadNumberDisplay),
-                       1, self.font2)
+        self.draw.text((0, 0),
+                       (self.ScratchpadString1Display + "" + self.ScratchpadString2Display + "" + self.ScratchpadNumberDisplay),
+                       1,
+                       self.font2)
         self.draw.line((0, 20, 115, 20), 1, 1)
 
         # comm1

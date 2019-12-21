@@ -41,8 +41,8 @@ COLOR_HEIGHT = 240
 def chkDLL():
     try:
         _dll
-    except NameError()  as e:
-        if (str(e).split("'")[1] == "_dll"):
+    except NameError() as e:
+        if str(e).split("'")[1] == "_dll":
             raise Exception('initDLL!!!!!!!!')
         else:
             raise Exception(e)

@@ -59,7 +59,7 @@ class G13Handler:
                 self.shouldActivateNewAC = True
 
             else:
-                ## FIXME a może tylko tyo zostawić, żeby po prostu zaczynał aktywaować nowy moduł, a weryfikację zostawić w metodzie poniżej?
+                # FIXME a może tylko tyo zostawić, żeby po prostu zaczynał aktywaować nowy moduł, a weryfikację zostawić w metodzie poniżej?
                 print("Unknown AC data: ", value)
                 self.infoDisplay(("Unknown AC data:", self.currentAC))
 
