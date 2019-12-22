@@ -10,7 +10,7 @@ from specelG13Handler import G13Handler
 __version__ = "v1.12"
 
 
-def attemptConnect():
+def attemptConnect(s):
     connected = False
     print("Waiting for DCS connection...")
     while not connected:
@@ -42,35 +42,40 @@ def checkCurrentVersion():
         print("Unable to check version online: ", e)
 
 
-print("specelUFC ", __version__, " https://github.com/specel/specelUFC")
-checkCurrentVersion()
-while True:
-    parser = ProtocolParser()
-    g13 = G13Handler(parser)
-    g13.infoDisplay(("G13 initialised OK", "Waiting for DCS", "", "specel UFC " + __version__))
-
-    s = socket.socket()
-    s.settimeout(None)
-
-    attemptConnect()
+def run():
+    print("specelUFC ", __version__, " https://github.com/specel/specelUFC")
+    checkCurrentVersion()
     while True:
-        try:
-            c = s.recv(1)
-            parser.processByte(c)
-            if g13.shouldActivateNewAC:
-                g13.activateNewAC()
+        parser = ProtocolParser()
+        g13 = G13Handler(parser)
+        g13.infoDisplay(("G13 initialised OK", "Waiting for DCS", "", "specel UFC " + __version__))
 
-            g13.buttonHandle(s)
+        s = socket.socket()
+        s.settimeout(None)
 
-        except socket.error as e:
-            print("Main loop socket error: ", e)
-            time.sleep(2)
+        attemptConnect(s)
+        while True:
+            try:
+                c = s.recv(1)
+                parser.processByte(c)
+                if g13.shouldActivateNewAC:
+                    g13.activateNewAC()
 
-        except Exception as e:
-            print("Unexpected error: resetting... : ", e)
-            time.sleep(2)
-            break
+                g13.buttonHandle(s)
 
-    del s
-    del g13
-    del parser
+            except socket.error as e:
+                print("Main loop socket error: ", e)
+                time.sleep(2)
+
+            except Exception as e:
+                print("Unexpected error: resetting... : ", e)
+                time.sleep(2)
+                break
+
+        del s
+        del g13
+        del parser
+
+
+if __name__ == '__main__':
+    run()
