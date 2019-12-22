@@ -1,8 +1,8 @@
-import requests
-import socket
-import time
+from socket import socket, error
+from time import sleep
 
 from packaging import version
+from requests import get
 
 from dcsbiosParser import ProtocolParser
 from specelG13Handler import G13Handler
@@ -18,14 +18,14 @@ def attemptConnect(s):
             s.connect(("127.0.0.1", 7778))
             print("Connected")
             connected = True
-        except socket.error:
-            time.sleep(2)
+        except error:
+            sleep(2)
 
 
 def checkCurrentVersion():
     try:
         url = "https://api.github.com/repos/specel/specelUFC/releases/latest"
-        response = requests.get(url)
+        response = get(url)
         if response.status_code == 200:
             jsonResponse = response.json()
             onlineVersion = jsonResponse["tag_name"]
@@ -50,7 +50,7 @@ def run():
         g13 = G13Handler(parser)
         g13.infoDisplay(("G13 initialised OK", "Waiting for DCS", "", "specel UFC " + __version__))
 
-        s = socket.socket()
+        s = socket()
         s.settimeout(None)
 
         attemptConnect(s)
@@ -63,13 +63,13 @@ def run():
 
                 g13.buttonHandle(s)
 
-            except socket.error as e:
+            except error as e:
                 print("Main loop socket error: ", e)
-                time.sleep(2)
+                sleep(2)
 
             except Exception as e:
                 print("Unexpected error: resetting... : ", e)
-                time.sleep(2)
+                sleep(2)
                 break
 
         del s
