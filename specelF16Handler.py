@@ -33,11 +33,11 @@ class F16Handler:
         # clear bitmap
         self.draw.rectangle((0, 0, self.width, self.height), 0, 0)
 
-        '''print(self.DEDLine1)
-        print(self.DEDLine2)
-        print(self.DEDLine3)
-        print(self.DEDLine4)
-        print(self.DEDLine5)'''
+        # print(self.DEDLine1)
+        # print(self.DEDLine2)
+        # print(self.DEDLine3)
+        # print(self.DEDLine4)
+        # print(self.DEDLine5)
 
         pos = 0
         offsetpos = 8
