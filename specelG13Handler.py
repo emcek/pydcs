@@ -92,13 +92,11 @@ class G13Handler:
             pixels[i] *= 128
 
         self.updateDisplay(pixels)
-        '''
-        if GLCD_SDK.LogiLcdIsConnected(GLCD_SDK.TYPE_MONO):
-            GLCD_SDK.LogiLcdMonoSetBackground((c_ubyte * (self.width *self.height))(*pixels))
-            GLCD_SDK.LogiLcdUpdate()
-        else:
-            print("LCD is not connected")
-        '''
+        # if GLCD_SDK.LogiLcdIsConnected(GLCD_SDK.TYPE_MONO):
+        #     GLCD_SDK.LogiLcdMonoSetBackground((c_ubyte * (self.width *self.height))(*pixels))
+        #     GLCD_SDK.LogiLcdUpdate()
+        # else:
+        #     print("LCD is not connected")
 
     def updateDisplay(self, pixels):
         # put bitmap array into display
