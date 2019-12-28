@@ -5,6 +5,7 @@ from dcsbiosParser import StringBuffer
 class FA18Handler(AircraftHandler):
     def __init__(self, displayHandler, parser):
         """
+        Basic constructor.
 
         :param displayHandler:
         :param parser:
@@ -45,9 +46,7 @@ class FA18Handler(AircraftHandler):
         self.bufferFuelTotal = StringBuffer(parser, 0x748a, 6, lambda s: self.setData(40, s))
 
     def updateDisplay(self):
-        """
-
-        """
+        """Update display."""
         # clear bitmap
         self.draw.rectangle((0, 0, self.width, self.height), 0, 0)
 
@@ -92,6 +91,7 @@ class FA18Handler(AircraftHandler):
 
     def setData(self, selector, value, update=True):
         """
+        Set new data.
 
         :param selector:
         :param value:

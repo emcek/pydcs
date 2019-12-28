@@ -12,8 +12,9 @@ __version__ = "v1.12"
 
 def attemptConnect(s):
     """
+    Attempt to connect to localhost.
 
-    :param s:
+    :param s: socket
     """
     connected = False
     print("Waiting for DCS connection...")
@@ -27,9 +28,7 @@ def attemptConnect(s):
 
 
 def checkCurrentVersion():
-    """
-
-    """
+    """Check if version is current."""
     try:
         url = "https://api.github.com/repos/specel/specelUFC/releases/latest"
         response = get(url)
@@ -50,9 +49,7 @@ def checkCurrentVersion():
 
 
 def run():
-    """
-
-    """
+    """Main of running function."""
     print("specelUFC ", __version__, " https://github.com/specel/specelUFC")
     checkCurrentVersion()
     while True:

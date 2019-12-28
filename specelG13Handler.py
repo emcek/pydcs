@@ -13,6 +13,7 @@ from specelFA18Handler import FA18Handler
 class G13Handler:
     def __init__(self, parserHook):
         """
+        Basic constructor.
 
         :param parserHook:
         """
@@ -45,6 +46,7 @@ class G13Handler:
     # for new A/C implementation, make sure that setAC() makes shouldActivateNewAC=true, and then activateNewAC creates needed handler###
     def setAC(self, value):
         """
+        Set aircraft.
 
         :param value:
         """
@@ -73,9 +75,7 @@ class G13Handler:
                 self.infoDisplay(("Unknown AC data:", self.currentAC))
 
     def activateNewAC(self):
-        """
-
-        """
+        """Actiate new aircraft."""
         self.shouldActivateNewAC = False
         if self.currentAC == "FA-18C_hornet":
             self.currentACHook = FA18Handler(self, self.parser)
@@ -86,6 +86,7 @@ class G13Handler:
 
     def infoDisplay(self, message=""):
         """
+        Send message to display.
 
         :param message:
         """
@@ -115,6 +116,7 @@ class G13Handler:
 
     def updateDisplay(self, pixels):
         """
+        Update display.
 
         :param pixels:
         """
@@ -127,6 +129,7 @@ class G13Handler:
 
     def ClearDisplay(self, TrueClear=0):
         """
+        Clear display.
 
         :param TrueClear:
         """
@@ -138,6 +141,7 @@ class G13Handler:
 
     def checkButtons(self):
         """
+        Check button state.
 
         :return:
         """
@@ -174,6 +178,7 @@ class G13Handler:
 
     def buttonHandle(self, socket):
         """
+        Button handler.
 
         :param socket:
         """
