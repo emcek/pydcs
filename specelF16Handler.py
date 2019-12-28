@@ -25,14 +25,7 @@ class F16Handler(AircraftHandler):
 
     def updateDisplay(self):
         """Update display."""
-        # clear bitmap
-        self.draw.rectangle((0, 0, self.width, self.height), 0, 0)
-
-        # print(self.DEDLine1)
-        # print(self.DEDLine2)
-        # print(self.DEDLine3)
-        # print(self.DEDLine4)
-        # print(self.DEDLine5)
+        super().updateDisplay()
 
         pos = 0
         offsetpos = 8

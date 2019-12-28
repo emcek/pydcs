@@ -47,8 +47,7 @@ class FA18Handler(AircraftHandler):
 
     def updateDisplay(self):
         """Update display."""
-        # clear bitmap
-        self.draw.rectangle((0, 0, self.width, self.height), 0, 0)
+        super().updateDisplay()
 
         # Scrachpad
         self.draw.text((0, 0),
