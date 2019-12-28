@@ -4,6 +4,11 @@ from dcsbiosParser import StringBuffer
 
 class FA18Handler(AircraftHandler):
     def __init__(self, displayHandler, parser):
+        """
+
+        :param displayHandler:
+        :param parser:
+        """
         super().__init__(displayHandler, parser)
         self.ScratchpadString1Display = ""
         self.ScratchpadString2Display = ""
@@ -40,6 +45,9 @@ class FA18Handler(AircraftHandler):
         self.bufferFuelTotal = StringBuffer(parser, 0x748a, 6, lambda s: self.setData(40, s))
 
     def updateDisplay(self):
+        """
+
+        """
         # clear bitmap
         self.draw.rectangle((0, 0, self.width, self.height), 0, 0)
 
@@ -83,6 +91,12 @@ class FA18Handler(AircraftHandler):
         self.g13.updateDisplay(pixels)
 
     def setData(self, selector, value, update=True):
+        """
+
+        :param selector:
+        :param value:
+        :param update:
+        """
         # programming noob here, but it's pretty clear how to use this monster
         if selector == 1:
             modifiedString = value

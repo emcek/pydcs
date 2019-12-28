@@ -11,6 +11,10 @@ __version__ = "v1.12"
 
 
 def attemptConnect(s):
+    """
+
+    :param s:
+    """
     connected = False
     print("Waiting for DCS connection...")
     while not connected:
@@ -23,6 +27,9 @@ def attemptConnect(s):
 
 
 def checkCurrentVersion():
+    """
+
+    """
     try:
         url = "https://api.github.com/repos/specel/specelUFC/releases/latest"
         response = get(url)
@@ -43,6 +50,9 @@ def checkCurrentVersion():
 
 
 def run():
+    """
+
+    """
     print("specelUFC ", __version__, " https://github.com/specel/specelUFC")
     checkCurrentVersion()
     while True:

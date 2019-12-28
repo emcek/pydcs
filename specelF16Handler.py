@@ -4,6 +4,11 @@ from dcsbiosParser import StringBuffer
 
 class F16Handler(AircraftHandler):
     def __init__(self, displayHandler, parser):
+        """
+
+        :param displayHandler:
+        :param parser:
+        """
         super().__init__(displayHandler, parser)
         self.DEDLine1 = ""
         self.DEDLine2 = ""
@@ -18,6 +23,9 @@ class F16Handler(AircraftHandler):
         self.bufferDEDLine5 = StringBuffer(parser, 0x45c4, 50, lambda s: self.setData("DEDLine5", s))
 
     def updateDisplay(self):
+        """
+
+        """
         # clear bitmap
         self.draw.rectangle((0, 0, self.width, self.height), 0, 0)
 
@@ -47,6 +55,12 @@ class F16Handler(AircraftHandler):
         self.g13.updateDisplay(pixels)
 
     def setData(self, selector, value, update=True):
+        """
+
+        :param selector:
+        :param value:
+        :param update:
+        """
         # programming noob here, but it's pretty clear how to use this monster
         if selector == "DEDLine1":
             self.DEDLine1 = value
