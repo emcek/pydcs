@@ -1,13 +1,10 @@
-from PIL import Image, ImageFont, ImageDraw
-
+from aircraft import AircraftHandler
 from dcsbiosParser import StringBuffer
 
 
-class F16Handler:
+class F16Handler(AircraftHandler):
     def __init__(self, displayHandler, parser):
-        self.g13 = displayHandler
-        self.parser = parser
-
+        super().__init__(displayHandler, parser)
         self.DEDLine1 = ""
         self.DEDLine2 = ""
         self.DEDLine3 = ""
@@ -19,15 +16,6 @@ class F16Handler:
         self.bufferDEDLine3 = StringBuffer(parser, 0x4560, 50, lambda s: self.setData("DEDLine3", s))
         self.bufferDEDLine4 = StringBuffer(parser, 0x4592, 50, lambda s: self.setData("DEDLine4", s))
         self.bufferDEDLine5 = StringBuffer(parser, 0x45c4, 50, lambda s: self.setData("DEDLine5", s))
-
-        # self.g13 = displayHandler
-        self.width = 160
-        self.height = 43
-
-        self.img = Image.new('1', (self.width, self.height), 0)
-        self.draw = ImageDraw.Draw(self.img)
-        self.font1 = ImageFont.truetype("consola.ttf", 11)
-        self.font2 = ImageFont.truetype("consola.ttf", 16)
 
     def updateDisplay(self):
         # clear bitmap
@@ -75,13 +63,3 @@ class F16Handler:
 
         if update:
             self.updateDisplay()
-
-    def buttonHandleSpecificAC(self, buttonPressed):
-        if buttonPressed == 1:
-            return "UFC_COMM1_CHANNEL_SELECT -3200\n"
-        elif buttonPressed == 2:
-            return "UFC_COMM1_CHANNEL_SELECT +3200\n"
-        elif buttonPressed == 3:
-            return "UFC_COMM2_CHANNEL_SELECT -3200\n"
-        elif buttonPressed == 4:
-            return "UFC_COMM2_CHANNEL_SELECT +3200\n"
