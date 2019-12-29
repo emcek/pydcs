@@ -55,7 +55,7 @@ def run():
     while True:
         parser = ProtocolParser()
         g13 = G13Handler(parser)
-        g13.infoDisplay(("G13 initialised OK", "Waiting for DCS", "", "specel UFC " + __version__))
+        g13.info_display(("G13 initialised OK", "Waiting for DCS", "", "specel UFC " + __version__))
 
         s = socket()
         s.settimeout(None)
@@ -66,9 +66,9 @@ def run():
                 c = s.recv(1)
                 parser.process_byte(c)
                 if g13.shouldActivateNewAC:
-                    g13.activateNewAC()
+                    g13.activate_new_ac()
 
-                g13.buttonHandle(s)
+                g13.button_handle(s)
 
             except error as e:
                 print("Main loop socket error: ", e)

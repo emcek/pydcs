@@ -86,7 +86,7 @@ class FA18Handler(AircraftHandler):
         for i in range(0, len(pixels)):
             pixels[i] *= 128
 
-        self.g13.updateDisplay(pixels)
+        self.g13.update_display(pixels)
 
     def setData(self, selector, value, update=True):
         """
