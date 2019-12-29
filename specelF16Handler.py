@@ -73,7 +73,7 @@ class F16Handler(AircraftHandler):
         elif selector == 'DEDLine5':
             self.DEDLine5 = value
         else:
-            warning('No such selector: ', selector)
+            warning(f'No such selector: {selector}')
         debug(f'value: {value}')
         if update:
             self.update_display()

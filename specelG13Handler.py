@@ -39,7 +39,7 @@ class G13Handler:
 
         # GLCD Init
         arch = 'x64' if all([architecture()[0] == '64bit', maxsize > 2 ** 32, sizeof(c_voidp) > 4]) else 'x86'
-        dll = "C:\\Program Files\\Logitech Gaming Software\\LCDSDK_8.57.148\\Lib\\GameEnginesWrapper\\{}\\LogitechLcdEnginesWrapper.dll".format(arch)
+        dll = f"C:\\Program Files\\Logitech Gaming Software\\LCDSDK_8.57.148\\Lib\\GameEnginesWrapper\\{arch}\\LogitechLcdEnginesWrapper.dll"
         GLCD_SDK.init_dll(dll)
         GLCD_SDK.LogiLcdInit('Python', GLCD_SDK.TYPE_MONO)
 
@@ -57,36 +57,23 @@ class G13Handler:
         """
         if not value == self.currentAC:
             self.currentAC = value
-            if value == "NONE":
-                info("Unknown AC data: ", value, )
-                self.info_display(("Unknown AC data:", self.currentAC))
-
-            elif value == "FA-18C_hornet":
+            if value in ('FA-18C_hornet', 'AV8BNA', 'F-16C_50'):
+                info('Detected AC: ', value)
                 self.info_display()
-                info("Detected AC: ", value)
                 self.shouldActivateNewAC = True
-
-            elif value == "AV8BNA":
-                info("Detected AC: ", value)
-                self.shouldActivateNewAC = True
-
-            elif value == "F-16C_50":
-                info("Detected AC: ", value)
-                self.shouldActivateNewAC = True
-
             else:
                 # FIXME a może tylko tyo zostawić, żeby po prostu zaczynał aktywaować nowy moduł, a weryfikację zostawić w metodzie poniżej?
-                warning("Unknown AC data: ", value)
-                self.info_display(("Unknown AC data:", self.currentAC))
+                warning(f'Unknown AC data: {value}')
+                self.info_display(('Unknown AC data:', self.currentAC))
 
     def activate_new_ac(self) -> None:
         """Actiate new aircraft."""
         self.shouldActivateNewAC = False
-        if self.currentAC == "FA-18C_hornet":
+        if self.currentAC == 'FA-18C_hornet':
             self.currentACHook = FA18Handler(self, self.parser)
-        elif self.currentAC == "AV8BNA":
-            self.info_display(("AV8BNA", "not implemented yet"))
-        elif self.currentAC == "F-16C_50":
+        elif self.currentAC == 'AV8BNA':
+            self.info_display(('AV8BNA', 'not implemented yet'))
+        elif self.currentAC == 'F-16C_50':
             self.currentACHook = F16Handler(self, self.parser)
         debug(f'Current AC: {self.currentAC} {self.currentACHook}')
 
@@ -131,7 +118,7 @@ class G13Handler:
             GLCD_SDK.LogiLcdMonoSetBackground((c_ubyte * (self.width * self.height))(*pixels))
             GLCD_SDK.LogiLcdUpdate()
         else:
-            warning("LCD is not connected")
+            warning('LCD is not connected')
 
     def clear_display(self, true_clear=False) -> None:
         """
@@ -190,4 +177,4 @@ class G13Handler:
         """
         button = self.check_buttons()
         if not button == 0:
-            s.send(bytes(self.currentACHook.button_handle_specific_ac(button), "utf-8"))
+            s.send(bytes(self.currentACHook.button_handle_specific_ac(button), 'utf-8'))
