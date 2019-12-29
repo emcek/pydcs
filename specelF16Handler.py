@@ -2,16 +2,17 @@ from typing import Any
 
 from aircraft import AircraftHandler
 from dcsbiosParser import StringBuffer, ProtocolParser
-from specelG13Handler import G13Handler
 
 
 class F16Handler(AircraftHandler):
-    def __init__(self, display_handler: G13Handler, parser: ProtocolParser) -> None:
+    def __init__(self, display_handler, parser: ProtocolParser) -> None:
         """
         Basic constructor.
 
         :param display_handler:
+        :type display_handler: G13Handler
         :param parser:
+        :type parser: ProtocolParser
         """
         super().__init__(display_handler, parser)
         self.DEDLine1 = ""
@@ -20,11 +21,11 @@ class F16Handler(AircraftHandler):
         self.DEDLine4 = ""
         self.DEDLine5 = ""
 
-        self.bufferDEDLine1 = StringBuffer(parser, 0x44fc, 50, lambda s: self.set_data("DEDLine1", s))
-        self.bufferDEDLine2 = StringBuffer(parser, 0x452e, 50, lambda s: self.set_data("DEDLine2", s))
-        self.bufferDEDLine3 = StringBuffer(parser, 0x4560, 50, lambda s: self.set_data("DEDLine3", s))
-        self.bufferDEDLine4 = StringBuffer(parser, 0x4592, 50, lambda s: self.set_data("DEDLine4", s))
-        self.bufferDEDLine5 = StringBuffer(parser, 0x45c4, 50, lambda s: self.set_data("DEDLine5", s))
+        self.bufferDEDLine1 = StringBuffer(parser, 0x44fc, 50, lambda s: self.set_data('DEDLine1', s))
+        self.bufferDEDLine2 = StringBuffer(parser, 0x452e, 50, lambda s: self.set_data('DEDLine2', s))
+        self.bufferDEDLine3 = StringBuffer(parser, 0x4560, 50, lambda s: self.set_data('DEDLine3', s))
+        self.bufferDEDLine4 = StringBuffer(parser, 0x4592, 50, lambda s: self.set_data('DEDLine4', s))
+        self.bufferDEDLine5 = StringBuffer(parser, 0x45c4, 50, lambda s: self.set_data('DEDLine5', s))
 
     def update_display(self) -> None:
         """Update display."""
@@ -58,18 +59,18 @@ class F16Handler(AircraftHandler):
         :param update:
         """
         # programming noob here, but it's pretty clear how to use this monster
-        if selector == "DEDLine1":
+        if selector == 'DEDLine1':
             self.DEDLine1 = value
-        elif selector == "DEDLine2":
+        elif selector == 'DEDLine2':
             self.DEDLine2 = value
-        elif selector == "DEDLine3":
+        elif selector == 'DEDLine3':
             self.DEDLine3 = value
-        elif selector == "DEDLine4":
+        elif selector == 'DEDLine4':
             self.DEDLine4 = value
-        elif selector == "DEDLine5":
+        elif selector == 'DEDLine5':
             self.DEDLine5 = value
         else:
-            print("No such selector: ", selector)
+            print('No such selector: ', selector)
 
         if update:
             self.update_display()

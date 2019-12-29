@@ -2,34 +2,35 @@ from typing import Any
 
 from aircraft import AircraftHandler
 from dcsbiosParser import StringBuffer, ProtocolParser
-from specelG13Handler import G13Handler
 
 
 class FA18Handler(AircraftHandler):
-    def __init__(self, display_handler: G13Handler, parser: ProtocolParser) -> None:
+    def __init__(self, display_handler, parser: ProtocolParser) -> None:
         """
         Basic constructor.
 
         :param display_handler:
+        :type display_handler: G13Handler
         :param parser:
+        :type parser: ProtocolParser
         """
         super().__init__(display_handler, parser)
-        self.ScratchpadString1Display = ""
-        self.ScratchpadString2Display = ""
-        self.ScratchpadNumberDisplay = ""
-        self.OptionDisplay1 = ""
-        self.OptionDisplay2 = ""
-        self.OptionDisplay3 = ""
-        self.OptionDisplay4 = ""
-        self.OptionDisplay5 = ""
-        self.COMM1Display = ""
-        self.COMM2Display = ""
-        self.OptionCueing1 = ""
-        self.OptionCueing2 = ""
-        self.OptionCueing3 = ""
-        self.OptionCueing4 = ""
-        self.OptionCueing5 = ""
-        self.FuelTotal = ""
+        self.ScratchpadString1Display = ''
+        self.ScratchpadString2Display = ''
+        self.ScratchpadNumberDisplay = ''
+        self.OptionDisplay1 = ''
+        self.OptionDisplay2 = ''
+        self.OptionDisplay3 = ''
+        self.OptionDisplay4 = ''
+        self.OptionDisplay5 = ''
+        self.COMM1Display = ''
+        self.COMM2Display = ''
+        self.OptionCueing1 = ''
+        self.OptionCueing2 = ''
+        self.OptionCueing3 = ''
+        self.OptionCueing4 = ''
+        self.OptionCueing5 = ''
+        self.FuelTotal = ''
 
         self.bufferScratchpadString1Display = StringBuffer(parser, 0x744e, 2, lambda s: self.set_data(1, s))
         self.bufferScratchpadString2Display = StringBuffer(parser, 0x7450, 2, lambda s: self.set_data(2, s))
@@ -54,7 +55,7 @@ class FA18Handler(AircraftHandler):
 
         # Scrachpad
         self.draw.text((0, 0),
-                       (self.ScratchpadString1Display + "" + self.ScratchpadString2Display + "" + self.ScratchpadNumberDisplay),
+                       (self.ScratchpadString1Display + '' + self.ScratchpadString2Display + '' + self.ScratchpadNumberDisplay),
                        1,
                        self.font2)
         self.draw.line((0, 20, 115, 20), 1, 1)
@@ -71,15 +72,15 @@ class FA18Handler(AircraftHandler):
         # option display 1..5 with cueing
         pos = 0
         offset = 8
-        self.draw.text((120, pos), "1" + self.OptionCueing1 + self.OptionDisplay1, 1, self.font1)
+        self.draw.text((120, pos), '1' + self.OptionCueing1 + self.OptionDisplay1, 1, self.font1)
         pos += offset
-        self.draw.text((120, pos), "2" + self.OptionCueing2 + self.OptionDisplay2, 1, self.font1)
+        self.draw.text((120, pos), '2' + self.OptionCueing2 + self.OptionDisplay2, 1, self.font1)
         pos += offset
-        self.draw.text((120, pos), "3" + self.OptionCueing3 + self.OptionDisplay3, 1, self.font1)
+        self.draw.text((120, pos), '3' + self.OptionCueing3 + self.OptionDisplay3, 1, self.font1)
         pos += offset
-        self.draw.text((120, pos), "4" + self.OptionCueing4 + self.OptionDisplay4, 1, self.font1)
+        self.draw.text((120, pos), '4' + self.OptionCueing4 + self.OptionDisplay4, 1, self.font1)
         pos += offset
-        self.draw.text((120, pos), "5" + self.OptionCueing5 + self.OptionDisplay5, 1, self.font1)
+        self.draw.text((120, pos), '5' + self.OptionCueing5 + self.OptionDisplay5, 1, self.font1)
 
         # Fuel Totaliser
         self.draw.text((36, 29), self.FuelTotal, 1, self.font2)
@@ -146,6 +147,6 @@ class FA18Handler(AircraftHandler):
         elif selector == 40:
             self.FuelTotal = value
         else:
-            print("No such selector: ", selector)
+            print('No such selector: ', selector)
         if update:
             self.update_display()
