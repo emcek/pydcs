@@ -119,8 +119,8 @@ class G13Handler:
     def update_display(self, pixels: List[c_ubyte]) -> None:
         """
         Update display.
-
         :param pixels:
+
         """
         # put bitmap array into display
         if GLCD_SDK.LogiLcdIsConnected(GLCD_SDK.TYPE_MONO):
