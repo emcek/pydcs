@@ -10,7 +10,7 @@ from specelG13Handler import G13Handler
 __version__ = "v1.12"
 
 
-def attempt_connect(s):
+def attempt_connect(s: socket) -> None:
     """
     Attempt to connect to localhost.
 
@@ -27,7 +27,7 @@ def attempt_connect(s):
             sleep(2)
 
 
-def check_current_version():
+def check_current_version() -> None:
     """Check if version is current."""
     try:
         url = "https://api.github.com/repos/specel/specelUFC/releases/latest"
@@ -48,7 +48,7 @@ def check_current_version():
         print("Unable to check version online: ", e)
 
 
-def run():
+def run() -> None:
     """Main of running function."""
     print("specelUFC ", __version__, " https://github.com/specel/specelUFC")
     check_current_version()

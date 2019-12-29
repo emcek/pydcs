@@ -1,9 +1,12 @@
+from typing import Any
+
 from aircraft import AircraftHandler
-from dcsbiosParser import StringBuffer
+from dcsbiosParser import StringBuffer, ProtocolParser
+from specelG13Handler import G13Handler
 
 
 class F16Handler(AircraftHandler):
-    def __init__(self, display_handler, parser):
+    def __init__(self, display_handler: G13Handler, parser: ProtocolParser) -> None:
         """
         Basic constructor.
 
@@ -23,7 +26,7 @@ class F16Handler(AircraftHandler):
         self.bufferDEDLine4 = StringBuffer(parser, 0x4592, 50, lambda s: self.set_data("DEDLine4", s))
         self.bufferDEDLine5 = StringBuffer(parser, 0x45c4, 50, lambda s: self.set_data("DEDLine5", s))
 
-    def update_display(self):
+    def update_display(self) -> None:
         """Update display."""
         super().update_display()
 
@@ -46,7 +49,7 @@ class F16Handler(AircraftHandler):
 
         self.g13.update_display(pixels)
 
-    def set_data(self, selector, value, update=True):
+    def set_data(self, selector: str, value: Any, update=True) -> None:
         """
         Set new data.
 

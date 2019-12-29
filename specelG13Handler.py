@@ -1,17 +1,19 @@
 from ctypes import c_ubyte, sizeof, c_voidp
 from platform import architecture
+from socket import socket
 from sys import maxsize
+from typing import List
 
 from PIL import Image, ImageFont, ImageDraw
 
 import GLCD_SDK
-from dcsbiosParser import StringBuffer
+from dcsbiosParser import StringBuffer, ProtocolParser
 from specelF16Handler import F16Handler
 from specelFA18Handler import FA18Handler
 
 
 class G13Handler:
-    def __init__(self, parser_hook):
+    def __init__(self, parser_hook: ProtocolParser) -> None:
         """
         Basic constructor.
 
@@ -44,7 +46,7 @@ class G13Handler:
         self.font2 = ImageFont.truetype("consola.ttf", 16)
 
     # for new A/C implementation, make sure that setAC() makes shouldActivateNewAC=true, and then activateNewAC creates needed handler###
-    def set_ac(self, value):
+    def set_ac(self, value: str) -> None:
         """
         Set aircraft.
 
@@ -74,7 +76,7 @@ class G13Handler:
                 print("Unknown AC data: ", value)
                 self.info_display(("Unknown AC data:", self.currentAC))
 
-    def activate_new_ac(self):
+    def activate_new_ac(self) -> None:
         """Actiate new aircraft."""
         self.shouldActivateNewAC = False
         if self.currentAC == "FA-18C_hornet":
@@ -84,7 +86,7 @@ class G13Handler:
         elif self.currentAC == "F-16C_50":
             self.currentACHook = F16Handler(self, self.parser)
 
-    def info_display(self, message=('', '')):
+    def info_display(self, message=('', '')) -> None:
         """
         Send message to display.
 
@@ -114,7 +116,7 @@ class G13Handler:
         # else:
         #     print("LCD is not connected")
 
-    def update_display(self, pixels):
+    def update_display(self, pixels: List[bytes]) -> None:
         """
         Update display.
 
@@ -127,7 +129,7 @@ class G13Handler:
         else:
             print("LCD is not connected")
 
-    def clear_display(self, true_clear=False):
+    def clear_display(self, true_clear=False) -> None:
         """
         Clear display.
 
@@ -139,7 +141,7 @@ class G13Handler:
                 GLCD_SDK.LogiLcdMonoSetText(i, "")
         GLCD_SDK.LogiLcdUpdate()
 
-    def check_buttons(self):
+    def check_buttons(self) -> int:
         """
         Check button state.
 
@@ -176,12 +178,12 @@ class G13Handler:
             self.isAlreadyPressed = False
             return 0
 
-    def button_handle(self, socket):
+    def button_handle(self, s: socket) -> None:
         """
         Button handler.
 
-        :param socket:
+        :param s:
         """
         button = self.check_buttons()
         if not button == 0:
-            socket.send(bytes(self.currentACHook.button_handle_specific_ac(button), "utf-8"))
+            s.send(bytes(self.currentACHook.button_handle_specific_ac(button), "utf-8"))
