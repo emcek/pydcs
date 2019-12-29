@@ -1,5 +1,6 @@
 from ctypes import c_ubyte, sizeof, c_voidp
 from logging import basicConfig, DEBUG, info, debug, warning
+from math import log2
 from platform import architecture
 from socket import socket
 from sys import maxsize
@@ -138,33 +139,13 @@ class G13Handler:
 
         :return:
         """
-        if GLCD_SDK.LogiLcdIsButtonPressed(GLCD_SDK.MONO_BUTTON_0):
-            if not self.isAlreadyPressed:
-                self.isAlreadyPressed = True
-                return 1
-            else:
-                return 0
-
-        elif GLCD_SDK.LogiLcdIsButtonPressed(GLCD_SDK.MONO_BUTTON_1):
-            if not self.isAlreadyPressed:
-                self.isAlreadyPressed = True
-                return 2
-            else:
-                return 0
-
-        elif GLCD_SDK.LogiLcdIsButtonPressed(GLCD_SDK.MONO_BUTTON_2):
-            if not self.isAlreadyPressed:
-                self.isAlreadyPressed = True
-                return 3
-            else:
-                return 0
-
-        elif GLCD_SDK.LogiLcdIsButtonPressed(GLCD_SDK.MONO_BUTTON_3):
-            if not self.isAlreadyPressed:
-                self.isAlreadyPressed = True
-                return 4
-            else:
-                return 0
+        for btn in (GLCD_SDK.MONO_BUTTON_0, GLCD_SDK.MONO_BUTTON_1, GLCD_SDK.MONO_BUTTON_2, GLCD_SDK.MONO_BUTTON_3):
+            if GLCD_SDK.LogiLcdIsButtonPressed(btn):
+                if not self.isAlreadyPressed:
+                    self.isAlreadyPressed = True
+                    return int(log2(btn)) + 1
+                else:
+                    return 0
         else:
             self.isAlreadyPressed = False
             return 0
@@ -176,5 +157,5 @@ class G13Handler:
         :param s:
         """
         button = self.check_buttons()
-        if not button == 0:
+        if not button:
             s.send(bytes(self.currentACHook.button_handle_specific_ac(button), 'utf-8'))
