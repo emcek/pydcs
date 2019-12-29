@@ -9,9 +9,8 @@ from typing import List
 from PIL import Image, ImageFont, ImageDraw
 
 import GLCD_SDK
+from aircrafts import FA18Handler, F16Handler
 from dcsbiosParser import StringBuffer, ProtocolParser
-from specelF16Handler import F16Handler
-from specelFA18Handler import FA18Handler
 
 basicConfig(format='%(asctime)s | %(levelname)-6s | %(message)s / %(filename)s:%(lineno)d', level=DEBUG)
 

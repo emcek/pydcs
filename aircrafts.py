@@ -1,10 +1,67 @@
+from abc import abstractmethod
 from logging import basicConfig, DEBUG, debug, warning
 from typing import Any
 
-from aircraft import AircraftHandler
-from dcsbiosParser import StringBuffer, ProtocolParser
+from PIL import Image, ImageFont, ImageDraw
+
+from GLCD_SDK import MONO_HEIGHT, MONO_WIDTH
+from dcsbiosParser import ProtocolParser, StringBuffer
 
 basicConfig(format='%(asctime)s | %(levelname)-6s | %(message)s / %(filename)s:%(lineno)d', level=DEBUG)
+
+
+class AircraftHandler:
+    def __init__(self, display_handler, parser: ProtocolParser) -> None:
+        """
+        Basic constructor.
+
+        :param display_handler:
+        :type display_handler: G13Handler
+        :param parser:
+        :type parser: ProtocolParser
+        """
+        self.g13 = display_handler
+        self.parser = parser
+        self.width = MONO_WIDTH
+        self.height = MONO_HEIGHT
+        self.img = Image.new('1', (self.width, self.height), 0)
+        self.draw = ImageDraw.Draw(self.img)
+        self.font1 = ImageFont.truetype('consola.ttf', 11)
+        self.font2 = ImageFont.truetype('consola.ttf', 16)
+
+    def button_handle_specific_ac(self, button_pressed: int) -> str:
+        """
+        Button handler for spacific aircraft.
+
+        :param button_pressed:
+        :return:
+        """
+        request = ''
+        if button_pressed == 1:
+            request = 'UFC_COMM1_CHANNEL_SELECT -3200\n'
+        elif button_pressed == 2:
+            request = 'UFC_COMM1_CHANNEL_SELECT +3200\n'
+        elif button_pressed == 3:
+            request = 'UFC_COMM2_CHANNEL_SELECT -3200\n'
+        elif button_pressed == 4:
+            request = 'UFC_COMM2_CHANNEL_SELECT +3200\n'
+        debug(f'Button: {button_pressed} Request: {request}')
+        return request
+
+    def update_display(self) -> None:
+        """Update display."""
+        self.draw.rectangle((0, 0, self.width, self.height), 0, 0)  # clear bitmap
+
+    @abstractmethod
+    def set_data(self, selector, value, update=True) -> None:
+        """
+        Set new data.
+
+        :param selector:
+        :param value:
+        :param update:
+        """
+        pass
 
 
 class FA18Handler(AircraftHandler):
@@ -149,6 +206,78 @@ class FA18Handler(AircraftHandler):
             self.OptionCueing5 = value
         elif selector == 40:
             self.FuelTotal = value
+        else:
+            warning(f'No such selector: {selector}')
+        debug(f'value: {value}')
+        if update:
+            self.update_display()
+
+
+class F16Handler(AircraftHandler):
+    def __init__(self, display_handler, parser: ProtocolParser) -> None:
+        """
+        Basic constructor.
+
+        :param display_handler:
+        :type display_handler: G13Handler
+        :param parser:
+        :type parser: ProtocolParser
+        """
+        super().__init__(display_handler, parser)
+        self.DEDLine1 = ""
+        self.DEDLine2 = ""
+        self.DEDLine3 = ""
+        self.DEDLine4 = ""
+        self.DEDLine5 = ""
+
+        self.bufferDEDLine1 = StringBuffer(parser, 0x44fc, 50, lambda s: self.set_data('DEDLine1', s))
+        self.bufferDEDLine2 = StringBuffer(parser, 0x452e, 50, lambda s: self.set_data('DEDLine2', s))
+        self.bufferDEDLine3 = StringBuffer(parser, 0x4560, 50, lambda s: self.set_data('DEDLine3', s))
+        self.bufferDEDLine4 = StringBuffer(parser, 0x4592, 50, lambda s: self.set_data('DEDLine4', s))
+        self.bufferDEDLine5 = StringBuffer(parser, 0x45c4, 50, lambda s: self.set_data('DEDLine5', s))
+
+    def update_display(self) -> None:
+        """Update display."""
+        super().update_display()
+
+        pos = 0
+        offsetpos = 8
+        self.draw.text((0, pos), self.DEDLine1, 1, self.font1)
+        pos = pos + offsetpos
+        self.draw.text((0, pos), self.DEDLine2, 1, self.font1)
+        pos = pos + offsetpos
+        self.draw.text((0, pos), self.DEDLine3, 1, self.font1)
+        pos = pos + offsetpos
+        self.draw.text((0, pos), self.DEDLine4, 1, self.font1)
+        pos = pos + offsetpos
+        self.draw.text((0, pos), self.DEDLine5, 1, self.font1)
+
+        # make it array and set proper values
+        pixels = list(self.img.getdata())
+        for i in range(0, len(pixels)):
+            pixels[i] *= 128
+
+        self.g13.update_display(pixels)
+
+    def set_data(self, selector: str, value: Any, update=True) -> None:
+        """
+        Set new data.
+
+        :param selector:
+        :param value:
+        :param update:
+        """
+        # programming noob here, but it's pretty clear how to use this monster
+        if selector == 'DEDLine1':
+            self.DEDLine1 = value
+        elif selector == 'DEDLine2':
+            self.DEDLine2 = value
+        elif selector == 'DEDLine3':
+            self.DEDLine3 = value
+        elif selector == 'DEDLine4':
+            self.DEDLine4 = value
+        elif selector == 'DEDLine5':
+            self.DEDLine5 = value
         else:
             warning(f'No such selector: {selector}')
         debug(f'value: {value}')
