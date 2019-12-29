@@ -10,7 +10,7 @@ from specelG13Handler import G13Handler
 __version__ = "v1.12"
 
 
-def attemptConnect(s):
+def attempt_connect(s):
     """
     Attempt to connect to localhost.
 
@@ -27,21 +27,21 @@ def attemptConnect(s):
             sleep(2)
 
 
-def checkCurrentVersion():
+def check_current_version():
     """Check if version is current."""
     try:
         url = "https://api.github.com/repos/specel/specelUFC/releases/latest"
         response = get(url)
         if response.status_code == 200:
-            jsonResponse = response.json()
-            onlineVersion = jsonResponse["tag_name"]
-            if version.parse(onlineVersion) > version.parse(__version__):
-                print("There is updated version of specelUFC: ", onlineVersion,
+            json_response = response.json()
+            online_version = json_response["tag_name"]
+            if version.parse(online_version) > version.parse(__version__):
+                print("There is updated version of specelUFC: ", online_version,
                       "- get it on https://github.com/specel/specelUFC")
-            elif version.parse(onlineVersion) == version.parse(__version__):
+            elif version.parse(online_version) == version.parse(__version__):
                 print("This is up-to-date version")
             else:
-                print("Something goes wrong: local version:", __version__, ", a onlineVersion:", onlineVersion)
+                print("Something goes wrong: local version:", __version__, ", a online_version:", online_version)
         else:
             print("Unable to check version online. Try again later. Status=", response.status_code())
     except Exception as e:
@@ -51,7 +51,7 @@ def checkCurrentVersion():
 def run():
     """Main of running function."""
     print("specelUFC ", __version__, " https://github.com/specel/specelUFC")
-    checkCurrentVersion()
+    check_current_version()
     while True:
         parser = ProtocolParser()
         g13 = G13Handler(parser)
@@ -60,7 +60,7 @@ def run():
         s = socket()
         s.settimeout(None)
 
-        attemptConnect(s)
+        attempt_connect(s)
         while True:
             try:
                 c = s.recv(1)
