@@ -35,8 +35,8 @@ class G13Handler:
         self.isAlreadyPressed = False
 
         # display parameters
-        self.width = 160
-        self.height = 43
+        self.width = GLCD_SDK.MONO_WIDTH
+        self.height = GLCD_SDK.MONO_WIDTH
 
         # GLCD Init
         arch = 'x64' if all([architecture()[0] == '64bit', maxsize > 2 ** 32, sizeof(c_void_p) > 4]) else 'x86'
