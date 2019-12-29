@@ -58,7 +58,7 @@ class G13Handler:
         if not value == self.currentAC:
             self.currentAC = value
             if value in ('FA-18C_hornet', 'AV8BNA', 'F-16C_50'):
-                info('Detected AC: ', value)
+                info(f'Detected AC: {value}')
                 self.info_display()
                 self.shouldActivateNewAC = True
             else:
