@@ -64,7 +64,7 @@ def run():
         while True:
             try:
                 c = s.recv(1)
-                parser.processByte(c)
+                parser.process_byte(c)
                 if g13.shouldActivateNewAC:
                     g13.activateNewAC()
 
