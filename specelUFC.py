@@ -43,7 +43,7 @@ def check_current_version() -> None:
             else:
                 print("Something goes wrong: local version:", __version__, ", a online_version:", online_version)
         else:
-            print("Unable to check version online. Try again later. Status=", response.status_code())
+            print("Unable to check version online. Try again later. Status=", response.status_code)
     except Exception as e:
         print("Unable to check version online: ", e)
 

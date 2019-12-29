@@ -24,7 +24,7 @@ class G13Handler:
 
         self.bufferAC = StringBuffer(parser_hook, 0x0000, 16, lambda v: self.set_ac(v))
         self.parser = parser_hook
-        self.currentAC = None
+        self.currentAC = ''
         self.currentACHook = None
         self.shouldActivateNewAC = False
 
@@ -38,12 +38,12 @@ class G13Handler:
         arch = 'x64' if all([architecture()[0] == '64bit', maxsize > 2 ** 32, sizeof(c_voidp) > 4]) else 'x86'
         dll = "C:\\Program Files\\Logitech Gaming Software\\LCDSDK_8.57.148\\Lib\\GameEnginesWrapper\\{}\\LogitechLcdEnginesWrapper.dll".format(arch)
         GLCD_SDK.init_dll(dll)
-        GLCD_SDK.LogiLcdInit("Python", GLCD_SDK.TYPE_MONO)
+        GLCD_SDK.LogiLcdInit('Python', GLCD_SDK.TYPE_MONO)
 
         self.img = Image.new('1', (self.width, self.height), 0)
         self.draw = ImageDraw.Draw(self.img)
-        self.font1 = ImageFont.truetype("consola.ttf", 11)
-        self.font2 = ImageFont.truetype("consola.ttf", 16)
+        self.font1 = ImageFont.truetype('consola.ttf', 11)
+        self.font2 = ImageFont.truetype('consola.ttf', 16)
 
     # for new A/C implementation, make sure that setAC() makes shouldActivateNewAC=true, and then activateNewAC creates needed handler###
     def set_ac(self, value: str) -> None:
@@ -116,7 +116,7 @@ class G13Handler:
         # else:
         #     print("LCD is not connected")
 
-    def update_display(self, pixels: List[bytes]) -> None:
+    def update_display(self, pixels: List[c_ubyte]) -> None:
         """
         Update display.
 
