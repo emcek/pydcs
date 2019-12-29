@@ -38,26 +38,25 @@ def check_current_version() -> None:
             json_response = response.json()
             online_version = json_response['tag_name']
             if version.parse(online_version) > version.parse(__version__):
-                info('There is updated version of specelUFC: ', online_version,
-                      '- get it on https://github.com/specel/specelUFC')
+                info(f'There is new version of specelUFC: {online_version}')
             elif version.parse(online_version) == version.parse(__version__):
                 info('This is up-to-date version')
             else:
-                debug('Something goes wrong: local version:', __version__, ', a online_version:', online_version)
+                debug(f'Something goes wrong: local version: {__version__} a online_version: {online_version}')
         else:
-            warning('Unable to check version online. Try again later. Status=', response.status_code)
+            warning(f'Unable to check version online. Try again later. Status={response.status_code}')
     except Exception as e:
-        warning('Unable to check version online: ', e)
+        warning(f'Unable to check version online: {e}')
 
 
 def run() -> None:
     """Main of running function."""
-    info('specelUFC ', __version__, ' https://github.com/specel/specelUFC')
+    info(f'specelUFC {__version__} https://github.com/specel/specelUFC')
     check_current_version()
     while True:
         parser = ProtocolParser()
         g13 = G13Handler(parser)
-        g13.info_display(('G13 initialised OK', 'Waiting for DCS', '', 'specel UFC ' + __version__))
+        g13.info_display(('G13 initialised OK', 'Waiting for DCS', '', f'specel UFC {__version__}'))
 
         s = socket()
         s.settimeout(None)
@@ -73,11 +72,11 @@ def run() -> None:
                 g13.button_handle(s)
 
             except error as e:
-                debug('Main loop socket error: ', e)
+                debug(f'Main loop socket error: {e}')
                 sleep(2)
 
             except Exception as e:
-                debug('Unexpected error: resetting... : ', e)
+                debug(f'Unexpected error: resetting... : {e}')
                 sleep(2)
                 break
 
