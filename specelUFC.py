@@ -1,3 +1,4 @@
+from logging import basicConfig, DEBUG, info, debug, warning
 from socket import socket, error
 from time import sleep
 
@@ -8,6 +9,7 @@ from dcsbiosParser import ProtocolParser
 from specelG13Handler import G13Handler
 
 __version__ = 'v1.12'
+basicConfig(format='%(asctime)s | %(levelname)-6s | %(message)s / %(filename)s:%(lineno)d', level=DEBUG)
 
 
 def attempt_connect(s: socket) -> None:
@@ -17,11 +19,11 @@ def attempt_connect(s: socket) -> None:
     :param s: socket
     """
     connected = False
-    print('Waiting for DCS connection...')
+    info('Waiting for DCS connection...')
     while not connected:
         try:
             s.connect(('127.0.0.1', 7778))
-            print('Connected')
+            info('Connected')
             connected = True
         except error:
             sleep(2)
@@ -36,21 +38,21 @@ def check_current_version() -> None:
             json_response = response.json()
             online_version = json_response['tag_name']
             if version.parse(online_version) > version.parse(__version__):
-                print('There is updated version of specelUFC: ', online_version,
+                info('There is updated version of specelUFC: ', online_version,
                       '- get it on https://github.com/specel/specelUFC')
             elif version.parse(online_version) == version.parse(__version__):
-                print('This is up-to-date version')
+                info('This is up-to-date version')
             else:
-                print('Something goes wrong: local version:', __version__, ', a online_version:', online_version)
+                debug('Something goes wrong: local version:', __version__, ', a online_version:', online_version)
         else:
-            print('Unable to check version online. Try again later. Status=', response.status_code)
+            warning('Unable to check version online. Try again later. Status=', response.status_code)
     except Exception as e:
-        print('Unable to check version online: ', e)
+        warning('Unable to check version online: ', e)
 
 
 def run() -> None:
     """Main of running function."""
-    print('specelUFC ', __version__, ' https://github.com/specel/specelUFC')
+    info('specelUFC ', __version__, ' https://github.com/specel/specelUFC')
     check_current_version()
     while True:
         parser = ProtocolParser()
@@ -71,11 +73,11 @@ def run() -> None:
                 g13.button_handle(s)
 
             except error as e:
-                print('Main loop socket error: ', e)
+                debug('Main loop socket error: ', e)
                 sleep(2)
 
             except Exception as e:
-                print('Unexpected error: resetting... : ', e)
+                debug('Unexpected error: resetting... : ', e)
                 sleep(2)
                 break
 
