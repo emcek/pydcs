@@ -157,5 +157,5 @@ class G13Handler:
         :param s:
         """
         button = self.check_buttons()
-        if not button:
+        if button:
             s.send(bytes(self.currentACHook.button_handle_specific_ac(button), 'utf-8'))
