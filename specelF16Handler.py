@@ -3,29 +3,29 @@ from dcsbiosParser import StringBuffer
 
 
 class F16Handler(AircraftHandler):
-    def __init__(self, displayHandler, parser):
+    def __init__(self, display_handler, parser):
         """
         Basic constructor.
 
-        :param displayHandler:
+        :param display_handler:
         :param parser:
         """
-        super().__init__(displayHandler, parser)
+        super().__init__(display_handler, parser)
         self.DEDLine1 = ""
         self.DEDLine2 = ""
         self.DEDLine3 = ""
         self.DEDLine4 = ""
         self.DEDLine5 = ""
 
-        self.bufferDEDLine1 = StringBuffer(parser, 0x44fc, 50, lambda s: self.setData("DEDLine1", s))
-        self.bufferDEDLine2 = StringBuffer(parser, 0x452e, 50, lambda s: self.setData("DEDLine2", s))
-        self.bufferDEDLine3 = StringBuffer(parser, 0x4560, 50, lambda s: self.setData("DEDLine3", s))
-        self.bufferDEDLine4 = StringBuffer(parser, 0x4592, 50, lambda s: self.setData("DEDLine4", s))
-        self.bufferDEDLine5 = StringBuffer(parser, 0x45c4, 50, lambda s: self.setData("DEDLine5", s))
+        self.bufferDEDLine1 = StringBuffer(parser, 0x44fc, 50, lambda s: self.set_data("DEDLine1", s))
+        self.bufferDEDLine2 = StringBuffer(parser, 0x452e, 50, lambda s: self.set_data("DEDLine2", s))
+        self.bufferDEDLine3 = StringBuffer(parser, 0x4560, 50, lambda s: self.set_data("DEDLine3", s))
+        self.bufferDEDLine4 = StringBuffer(parser, 0x4592, 50, lambda s: self.set_data("DEDLine4", s))
+        self.bufferDEDLine5 = StringBuffer(parser, 0x45c4, 50, lambda s: self.set_data("DEDLine5", s))
 
-    def updateDisplay(self):
+    def update_display(self):
         """Update display."""
-        super().updateDisplay()
+        super().update_display()
 
         pos = 0
         offsetpos = 8
@@ -46,7 +46,7 @@ class F16Handler(AircraftHandler):
 
         self.g13.update_display(pixels)
 
-    def setData(self, selector, value, update=True):
+    def set_data(self, selector, value, update=True):
         """
         Set new data.
 
@@ -69,4 +69,4 @@ class F16Handler(AircraftHandler):
             print("No such selector: ", selector)
 
         if update:
-            self.updateDisplay()
+            self.update_display()

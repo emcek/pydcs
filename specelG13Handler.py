@@ -184,4 +184,4 @@ class G13Handler:
         """
         button = self.check_buttons()
         if not button == 0:
-            socket.send(bytes(self.currentACHook.buttonHandleSpecificAC(button), "utf-8"))
+            socket.send(bytes(self.currentACHook.button_handle_specific_ac(button), "utf-8"))
