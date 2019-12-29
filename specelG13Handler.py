@@ -1,4 +1,4 @@
-from ctypes import c_ubyte, sizeof, c_voidp
+from ctypes import c_ubyte, sizeof, c_void_p
 from logging import basicConfig, DEBUG, info, debug, warning
 from math import log2
 from platform import architecture
@@ -39,7 +39,7 @@ class G13Handler:
         self.height = 43
 
         # GLCD Init
-        arch = 'x64' if all([architecture()[0] == '64bit', maxsize > 2 ** 32, sizeof(c_voidp) > 4]) else 'x86'
+        arch = 'x64' if all([architecture()[0] == '64bit', maxsize > 2 ** 32, sizeof(c_void_p) > 4]) else 'x86'
         dll = f"C:\\Program Files\\Logitech Gaming Software\\LCDSDK_8.57.148\\Lib\\GameEnginesWrapper\\{arch}\\LogitechLcdEnginesWrapper.dll"
         GLCD_SDK.init_dll(dll)
         GLCD_SDK.LogiLcdInit('Python', GLCD_SDK.TYPE_MONO)
@@ -130,7 +130,7 @@ class G13Handler:
         GLCD_SDK.LogiLcdMonoSetBackground((c_ubyte * (self.width * self.height))(*[0] * (self.width * self.height)))
         if true_clear:
             for i in range(4):
-                GLCD_SDK.LogiLcdMonoSetText(i, "")
+                GLCD_SDK.LogiLcdMonoSetText(i, '')
         GLCD_SDK.LogiLcdUpdate()
 
     def check_buttons(self) -> int:
