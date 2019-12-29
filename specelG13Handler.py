@@ -1,4 +1,5 @@
 from ctypes import c_ubyte, sizeof, c_voidp
+from logging import basicConfig, DEBUG, info, debug, warning
 from platform import architecture
 from socket import socket
 from sys import maxsize
@@ -10,6 +11,8 @@ import GLCD_SDK
 from dcsbiosParser import StringBuffer, ProtocolParser
 from specelF16Handler import F16Handler
 from specelFA18Handler import FA18Handler
+
+basicConfig(format='%(asctime)s | %(levelname)-6s | %(message)s / %(filename)s:%(lineno)d', level=DEBUG)
 
 
 class G13Handler:
@@ -55,25 +58,25 @@ class G13Handler:
         if not value == self.currentAC:
             self.currentAC = value
             if value == "NONE":
-                print("Unknown AC data: ", value, )
+                info("Unknown AC data: ", value, )
                 self.info_display(("Unknown AC data:", self.currentAC))
 
             elif value == "FA-18C_hornet":
                 self.info_display()
-                print("Detected AC: ", value)
+                info("Detected AC: ", value)
                 self.shouldActivateNewAC = True
 
             elif value == "AV8BNA":
-                print("Detected AC: ", value)
+                info("Detected AC: ", value)
                 self.shouldActivateNewAC = True
 
             elif value == "F-16C_50":
-                print("Detected AC: ", value)
+                info("Detected AC: ", value)
                 self.shouldActivateNewAC = True
 
             else:
                 # FIXME a może tylko tyo zostawić, żeby po prostu zaczynał aktywaować nowy moduł, a weryfikację zostawić w metodzie poniżej?
-                print("Unknown AC data: ", value)
+                warning("Unknown AC data: ", value)
                 self.info_display(("Unknown AC data:", self.currentAC))
 
     def activate_new_ac(self) -> None:
@@ -85,6 +88,7 @@ class G13Handler:
             self.info_display(("AV8BNA", "not implemented yet"))
         elif self.currentAC == "F-16C_50":
             self.currentACHook = F16Handler(self, self.parser)
+        debug(f'Current AC: {self.currentAC} {self.currentACHook}')
 
     def info_display(self, message=('', '')) -> None:
         """
@@ -127,7 +131,7 @@ class G13Handler:
             GLCD_SDK.LogiLcdMonoSetBackground((c_ubyte * (self.width * self.height))(*pixels))
             GLCD_SDK.LogiLcdUpdate()
         else:
-            print("LCD is not connected")
+            warning("LCD is not connected")
 
     def clear_display(self, true_clear=False) -> None:
         """
