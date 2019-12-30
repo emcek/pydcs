@@ -4,7 +4,6 @@ from math import log2
 from platform import architecture
 from socket import socket
 from sys import maxsize
-from typing import List
 
 from PIL import Image, ImageFont, ImageDraw
 
