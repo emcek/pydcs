@@ -11,7 +11,7 @@ import lcd_sdk
 from aircrafts import FA18Handler, F16Handler, Ka50Handler
 from dcsbios import StringBuffer, ProtocolParser
 
-basicConfig(format='%(asctime)s | %(levelname)-6s | %(message)s / %(filename)s:%(lineno)d', level=DEBUG)
+basicConfig(format='%(asctime)s | %(levelname)-7s | %(message)s / %(filename)s:%(lineno)d', level=DEBUG)
 
 
 class G13Handler:
