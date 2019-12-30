@@ -8,7 +8,7 @@ from sys import maxsize
 from PIL import Image, ImageFont, ImageDraw
 
 import lcd_sdk
-from aircrafts import FA18Handler, F16Handler
+from aircrafts import FA18Handler, F16Handler, Ka50Handler
 from dcsbios import StringBuffer, ProtocolParser
 
 basicConfig(format='%(asctime)s | %(levelname)-6s | %(message)s / %(filename)s:%(lineno)d', level=DEBUG)
@@ -53,7 +53,7 @@ class G13Handler:
         """
         if not value == self.currentAC:
             self.currentAC = value
-            if value in ('FA-18C_hornet', 'AV8BNA', 'F-16C_50'):
+            if value in ('FA-18C_hornet', 'Ka-50', 'F-16C_50'):
                 info(f'Detected AC: {value}')
                 self.info_display()
                 self.shouldActivateNewAC = True
@@ -67,11 +67,11 @@ class G13Handler:
         self.shouldActivateNewAC = False
         if self.currentAC == 'FA-18C_hornet':
             self.currentACHook = FA18Handler(self)
-        elif self.currentAC == 'AV8BNA':
-            self.info_display(('AV8BNA', 'not implemented yet'))
+        elif self.currentAC == 'Ka-50':
+            self.currentACHook = Ka50Handler(self)
         elif self.currentAC == 'F-16C_50':
             self.currentACHook = F16Handler(self)
-        debug(f'Current AC: {self.currentAC} {self.currentACHook}')
+        debug(f'Current AC: {self.currentAC}')
 
     def info_display(self, message=('', '')) -> None:
         """
