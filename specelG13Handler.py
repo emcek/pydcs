@@ -21,9 +21,6 @@ class G13Handler:
 
         :param parser_hook:
         """
-        # init all hornet stuff using new class - will change to autodetect someday:
-        # self.currentAChook = FA18Handler(self, parserHook)
-
         self.bufferAC = StringBuffer(parser_hook, 0x0000, 16, lambda v: self.set_ac(v))
         self.parser = parser_hook
         self.currentAC = ''
@@ -69,11 +66,11 @@ class G13Handler:
         """Actiate new aircraft."""
         self.shouldActivateNewAC = False
         if self.currentAC == 'FA-18C_hornet':
-            self.currentACHook = FA18Handler(self, self.parser)
+            self.currentACHook = FA18Handler(self)
         elif self.currentAC == 'AV8BNA':
             self.info_display(('AV8BNA', 'not implemented yet'))
         elif self.currentAC == 'F-16C_50':
-            self.currentACHook = F16Handler(self, self.parser)
+            self.currentACHook = F16Handler(self)
         debug(f'Current AC: {self.currentAC} {self.currentACHook}')
 
     def info_display(self, message=('', '')) -> None:
