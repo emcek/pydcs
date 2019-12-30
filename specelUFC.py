@@ -1,5 +1,5 @@
-from logging import basicConfig, DEBUG, info, debug, warning
-from socket import socket, error
+import socket
+from logging import basicConfig, DEBUG, info, debug, warning, error
 from time import sleep
 
 from packaging import version
@@ -12,7 +12,7 @@ __version__ = 'v1.12'
 basicConfig(format='%(asctime)s | %(levelname)-7s | %(message)s / %(filename)s:%(lineno)d', level=DEBUG)
 
 
-def attempt_connect(sock: socket) -> None:
+def attempt_connect(sock: socket.socket) -> None:
     """
     Attempt to connect to localhost.
 
@@ -25,10 +25,7 @@ def attempt_connect(sock: socket) -> None:
             sock.connect(('127.0.0.1', 7778))
             info('Connected')
             connected = True
-        except KeyboardInterrupt:
-            info('Exit')
-            exit(0)
-        except error:
+        except socket.error:
             sleep(2)
 
 
@@ -61,7 +58,7 @@ def run() -> None:
         g13 = G13Handler(parser)
         g13.info_display(('G13 initialised OK', 'Waiting for DCS', '', f'specel UFC {__version__}'))
 
-        sock = socket()
+        sock = socket.socket()
         sock.settimeout(None)
 
         attempt_connect(sock)
@@ -71,17 +68,15 @@ def run() -> None:
                 parser.process_byte(c)
                 if g13.shouldActivateNewAC:
                     g13.activate_new_ac()
-
                 g13.button_handle(sock)
-
-            except error as exp:
+            except socket.error as exp:
                 debug(f'Main loop socket error: {exp}')
                 sleep(2)
             except KeyboardInterrupt:
-                info('Exit / Ctrl-C')
+                info('Exit due to Ctrl-C')
                 exit(0)
             except Exception as exp:
-                debug(f'Unexpected error: resetting... : {exp}')
+                error(f'Unexpected error: resetting... {exp.__class__.__name__}', exc_info=True)
                 sleep(2)
                 break
         del sock
