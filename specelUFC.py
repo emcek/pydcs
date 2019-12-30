@@ -12,19 +12,22 @@ __version__ = 'v1.12'
 basicConfig(format='%(asctime)s | %(levelname)-6s | %(message)s / %(filename)s:%(lineno)d', level=DEBUG)
 
 
-def attempt_connect(s: socket) -> None:
+def attempt_connect(sock: socket) -> None:
     """
     Attempt to connect to localhost.
 
-    :param s: socket
+    :param sock: socket
     """
     connected = False
     info('Waiting for DCS connection...')
     while not connected:
         try:
-            s.connect(('127.0.0.1', 7778))
+            sock.connect(('127.0.0.1', 7778))
             info('Connected')
             connected = True
+        except KeyboardInterrupt:
+            info('Exit')
+            exit(0)
         except error:
             sleep(2)
 
@@ -58,29 +61,30 @@ def run() -> None:
         g13 = G13Handler(parser)
         g13.info_display(('G13 initialised OK', 'Waiting for DCS', '', f'specel UFC {__version__}'))
 
-        s = socket()
-        s.settimeout(None)
+        sock = socket()
+        sock.settimeout(None)
 
-        attempt_connect(s)
+        attempt_connect(sock)
         while True:
             try:
-                c = s.recv(1)
+                c = sock.recv(1)
                 parser.process_byte(c)
                 if g13.shouldActivateNewAC:
                     g13.activate_new_ac()
 
-                g13.button_handle(s)
+                g13.button_handle(sock)
 
-            except error as e:
-                debug(f'Main loop socket error: {e}')
+            except error as exp:
+                debug(f'Main loop socket error: {exp}')
                 sleep(2)
-
-            except Exception as e:
-                debug(f'Unexpected error: resetting... : {e}')
+            except KeyboardInterrupt:
+                info('Exit / Ctrl-C')
+                exit(0)
+            except Exception as exp:
+                debug(f'Unexpected error: resetting... : {exp}')
                 sleep(2)
                 break
-
-        del s
+        del sock
         del g13
         del parser
 
