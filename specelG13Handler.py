@@ -134,11 +134,9 @@ class G13Handler:
                 if not self.isAlreadyPressed:
                     self.isAlreadyPressed = True
                     return int(log2(btn)) + 1
-                else:
-                    return 0
-        else:
-            self.isAlreadyPressed = False
-            return 0
+                return 0
+        self.isAlreadyPressed = False
+        return 0
 
     def button_handle(self, s: socket) -> None:
         """
