@@ -101,11 +101,6 @@ class G13Handler:
             pixels[i] *= 128
 
         self.update_display(pixels)
-        # if GLCD_SDK.LogiLcdIsConnected(GLCD_SDK.TYPE_MONO):
-        #     GLCD_SDK.LogiLcdMonoSetBackground((c_ubyte * (self.width *self.height))(*pixels))
-        #     GLCD_SDK.LogiLcdUpdate()
-        # else:
-        #     print("LCD is not connected")
 
     def update_display(self, pixels: List[c_ubyte]) -> None:
         """
