@@ -97,7 +97,7 @@ class G13Handler:
                 y = y + 10
 
         pixels = list(self.img.getdata())
-        for i in range(0, len(pixels)):
+        for i, _ in enumerate(pixels):
             pixels[i] *= 128
 
         self.update_display(pixels)
