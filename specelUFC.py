@@ -5,7 +5,7 @@ from time import sleep
 from packaging import version
 from requests import get
 
-from dcsbiosParser import ProtocolParser
+from dcsbios import ProtocolParser
 from specelG13Handler import G13Handler
 
 __version__ = 'v1.12'

@@ -8,9 +8,9 @@ from typing import List
 
 from PIL import Image, ImageFont, ImageDraw
 
-import GLCD_SDK
+import lcd_sdk
 from aircrafts import FA18Handler, F16Handler
-from dcsbiosParser import StringBuffer, ProtocolParser
+from dcsbios import StringBuffer, ProtocolParser
 
 basicConfig(format='%(asctime)s | %(levelname)-6s | %(message)s / %(filename)s:%(lineno)d', level=DEBUG)
 
@@ -34,14 +34,14 @@ class G13Handler:
         self.isAlreadyPressed = False
 
         # display parameters
-        self.width = GLCD_SDK.MONO_WIDTH
-        self.height = GLCD_SDK.MONO_HEIGHT
+        self.width = lcd_sdk.MONO_WIDTH
+        self.height = lcd_sdk.MONO_HEIGHT
 
         # GLCD Init
         arch = 'x64' if all([architecture()[0] == '64bit', maxsize > 2 ** 32, sizeof(c_void_p) > 4]) else 'x86'
         dll = f"C:\\Program Files\\Logitech Gaming Software\\LCDSDK_8.57.148\\Lib\\GameEnginesWrapper\\{arch}\\LogitechLcdEnginesWrapper.dll"
-        GLCD_SDK.init_dll(dll)
-        GLCD_SDK.LogiLcdInit('Python', GLCD_SDK.TYPE_MONO)
+        lcd_sdk.init_dll(dll)
+        lcd_sdk.LogiLcdInit('Python', lcd_sdk.TYPE_MONO)
 
         self.img = Image.new('1', (self.width, self.height), 0)
         self.draw = ImageDraw.Draw(self.img)
@@ -114,9 +114,9 @@ class G13Handler:
         :param pixels:
         """
         # put bitmap array into display
-        if GLCD_SDK.LogiLcdIsConnected(GLCD_SDK.TYPE_MONO):
-            GLCD_SDK.LogiLcdMonoSetBackground((c_ubyte * (self.width * self.height))(*pixels))
-            GLCD_SDK.LogiLcdUpdate()
+        if lcd_sdk.LogiLcdIsConnected(lcd_sdk.TYPE_MONO):
+            lcd_sdk.LogiLcdMonoSetBackground((c_ubyte * (self.width * self.height))(*pixels))
+            lcd_sdk.LogiLcdUpdate()
         else:
             warning('LCD is not connected')
 
@@ -126,11 +126,11 @@ class G13Handler:
 
         :param true_clear:
         """
-        GLCD_SDK.LogiLcdMonoSetBackground((c_ubyte * (self.width * self.height))(*[0] * (self.width * self.height)))
+        lcd_sdk.LogiLcdMonoSetBackground((c_ubyte * (self.width * self.height))(*[0] * (self.width * self.height)))
         if true_clear:
             for i in range(4):
-                GLCD_SDK.LogiLcdMonoSetText(i, '')
-        GLCD_SDK.LogiLcdUpdate()
+                lcd_sdk.LogiLcdMonoSetText(i, '')
+        lcd_sdk.LogiLcdUpdate()
 
     def check_buttons(self) -> int:
         """
@@ -138,8 +138,8 @@ class G13Handler:
 
         :return:
         """
-        for btn in (GLCD_SDK.MONO_BUTTON_0, GLCD_SDK.MONO_BUTTON_1, GLCD_SDK.MONO_BUTTON_2, GLCD_SDK.MONO_BUTTON_3):
-            if GLCD_SDK.LogiLcdIsButtonPressed(btn):
+        for btn in (lcd_sdk.MONO_BUTTON_0, lcd_sdk.MONO_BUTTON_1, lcd_sdk.MONO_BUTTON_2, lcd_sdk.MONO_BUTTON_3):
+            if lcd_sdk.LogiLcdIsButtonPressed(btn):
                 if not self.isAlreadyPressed:
                     self.isAlreadyPressed = True
                     return int(log2(btn)) + 1
