@@ -96,18 +96,18 @@ class G13Handler:
                 self.draw.text((0, y), line, 1, self.font1)
                 y = y + 10
 
-        pixels = list(self.img.getdata())
-        for i, _ in enumerate(pixels):
-            pixels[i] *= 128
+        self.update_display(self.img)
 
-        self.update_display(pixels)
-
-    def update_display(self, pixels: List[c_ubyte]) -> None:
+    def update_display(self, img: Image) -> None:
         """
         Update display.
 
-        :param pixels:
+        :param img:
         """
+        pixels = list(img.getdata())
+        for i, _ in enumerate(pixels):
+            pixels[i] *= 128
+
         # put bitmap array into display
         if lcd_sdk.LogiLcdIsConnected(lcd_sdk.TYPE_MONO):
             lcd_sdk.LogiLcdMonoSetBackground((c_ubyte * (self.width * self.height))(*pixels))
