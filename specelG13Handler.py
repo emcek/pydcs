@@ -1,4 +1,5 @@
 from ctypes import c_ubyte, sizeof, c_void_p
+from importlib import import_module
 from logging import basicConfig, DEBUG, info, debug, warning
 from math import log2
 from platform import architecture
@@ -8,7 +9,6 @@ from sys import maxsize
 from PIL import Image, ImageFont, ImageDraw
 
 import lcd_sdk
-from aircrafts import FA18Handler, F16Handler, Ka50Handler
 from dcsbios import StringBuffer, ProtocolParser
 
 basicConfig(format='%(asctime)s | %(levelname)-7s | %(message)s / %(filename)s:%(lineno)d', level=DEBUG)
@@ -44,7 +44,6 @@ class G13Handler:
         self.font1 = ImageFont.truetype('consola.ttf', 11)
         self.font2 = ImageFont.truetype('consola.ttf', 16)
 
-    # for new A/C implementation, make sure that setAC() makes shouldActivateNewAC=true, and then activateNewAC creates needed handler###
     def set_ac(self, value: str) -> None:
         """
         Set aircraft.
@@ -65,13 +64,10 @@ class G13Handler:
     def activate_new_ac(self) -> None:
         """Actiate new aircraft."""
         self.shouldActivateNewAC = False
-        if self.currentAC == 'FA-18C_hornet':
-            self.currentACHook = FA18Handler(self)
-        elif self.currentAC == 'Ka-50':
-            self.currentACHook = Ka50Handler(self)
-        elif self.currentAC == 'F-16C_50':
-            self.currentACHook = F16Handler(self)
-        debug(f'Current AC: {self.currentAC}')
+        plane_name = self.currentAC.replace('-', '').replace('_', '')
+        plane_class = getattr(import_module('aircrafts'), plane_name)
+        debug(f'Dynamic load of: {plane_name} as {self.currentAC}')
+        self.currentACHook = plane_class(self)
 
     def info_display(self, message=('', '')) -> None:
         """
