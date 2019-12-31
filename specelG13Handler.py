@@ -21,7 +21,7 @@ class G13Handler:
 
         :param parser_hook:
         """
-        self.bufferAC = StringBuffer(parser_hook, 0x0000, 16, lambda v: self.set_ac(v))
+        self.bufferAC = StringBuffer(parser_hook, 0x0000, 16, lambda val: self.set_ac(value=val))
         self.parser = parser_hook
         self.currentAC = ''
         self.currentACHook = None
