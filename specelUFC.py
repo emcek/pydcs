@@ -8,7 +8,7 @@ from requests import get
 from dcsbios import ProtocolParser
 from specelG13Handler import G13Handler
 
-__version__ = 'v1.12'
+__version__ = 'v1.12.1'
 basicConfig(format='%(asctime)s | %(levelname)-7s | %(message)s / %(filename)s:%(lineno)d', level=DEBUG)
 
 
