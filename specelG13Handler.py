@@ -37,7 +37,7 @@ class G13Handler:
         arch = 'x64' if all([architecture()[0] == '64bit', maxsize > 2 ** 32, sizeof(c_void_p) > 4]) else 'x86'
         dll = f"C:\\Program Files\\Logitech Gaming Software\\LCDSDK_8.57.148\\Lib\\GameEnginesWrapper\\{arch}\\LogitechLcdEnginesWrapper.dll"
         lcd_sdk.init_dll(dll)
-        lcd_sdk.LogiLcdInit('Python', lcd_sdk.TYPE_MONO)
+        lcd_sdk.LogiLcdInit('DCS World', lcd_sdk.TYPE_MONO)
 
         self.img = Image.new('1', (self.width, self.height), 0)
         self.draw = ImageDraw.Draw(self.img)
